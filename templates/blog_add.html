@@ -1,0 +1,58 @@
+{% set current_page = "blog_add" %}
+{% extends "layouts/app.html" %}
+{% block title %}All Blogs Website | Create New Blog{% endblock %}
+{% block content %}
+<div class="container my-5">
+  <h1 class="text-center">Create New Blog</h1>
+  <div class="row justify-content-md-center">
+    <div class="col-sm-12 col-md-10 col-lg-8">
+      {% if msg %}
+      <div
+      class="alert alert-{{ msg_type }}" role="alert">
+        {{ msg }}
+      </div>
+      {% endif %}
+      <form action="/blogs/add" method="post">
+        <div class="row">
+          <div class="col-sm-12 col-md-6 mb-3">
+            <label for="title" class="form-label">
+              Title
+              <span class="text-danger">*</span>
+            </label>
+            <input type="text" class="form-control" id="title" name="title" required>
+          </div>
+          <div class="col-sm-12 col-md-6 mb-3">
+            <label for="author" class="form-label">
+              Author
+              <span class="text-danger">*</span>
+            </label>
+            <input type="text" class="form-control" id="author" name="author" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">
+            Description
+            <span class="text-danger">*</span>
+          </label>
+          <input type="text" class="form-control" id="description" name="description" required>
+        </div>
+        <div class="mb-3">
+          <label for="body" class="form-label">
+            Body
+            <span class="text-danger">*</span>
+          </label>
+          <textarea class="form-control" id="body" rows="5" name="body" required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="link" class="form-label">Image Link</label>
+          <input type="text" class="form-control" id="link" name="image_link">
+        </div>
+        <div class="text-end mt-5">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

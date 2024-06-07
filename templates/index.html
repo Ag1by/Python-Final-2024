@@ -1,0 +1,25 @@
+{% set current_page = "home" %}
+{% extends "layouts/app.html" %}
+{% block content %}
+<!-- Hero Section -->
+<div class="container my-5">
+  <div class="row">
+    {% for blog in blogs %}
+    <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+      <div class="card">
+        {% if blog.image_link %}
+        <img src="{{ blog.image_link }}" class="card-img-top" alt="" height="249">
+        {% else %}
+        <img src="https://th.bing.com/th/id/OIP.OdV08mOw71O9qhdpUqdz_QHaE8?w=257&h=180&c=7&r=0&o=5&pid=1.7" class="card-img-top" alt="Default Blog Image">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ blog.title }}</h5>
+          <p class="card-text">{{ blog.description }}</p>
+          <a href="/blogs/{{ blog.id }}" class="btn btn-primary">Read More</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
