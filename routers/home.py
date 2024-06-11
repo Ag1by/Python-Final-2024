@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from markdown import markdown
 
 from models.blog import Blogs, BlogForm
 
@@ -56,6 +57,7 @@ async def create_blog(request: Request):
 @router.get("/blogs/{blog_id}", response_class=HTMLResponse)
 async def get_blog_by_id(request: Request, blog_id: str):
     blog = await Blogs.get(blog_id)
+    blog.body = markdown(blog.body)
     return templates.TemplateResponse("blog_detail.html", {
         "request": request,
         "blog": blog
@@ -98,7 +100,16 @@ async def update_blog(request: Request, blog_id: str):
             "blog": blog
         })
 
+@router.get("/blogs/delete/{blog_id}", response_class=RedirectResponse)
+async def delete_blog(blog_id: str):
+    try:
+        blog = await Blogs.get(blog_id)
+        await blog.delete()
+        return RedirectResponse(url="/")
 
+    except Exception as err:
+        print(err)
+        return RedirectResponse(url=f"/blogs/{blog_id}")
 @router.get("/about", response_class=HTMLResponse)
 async def get_about(request: Request):
     return templates.TemplateResponse("about.html", {
