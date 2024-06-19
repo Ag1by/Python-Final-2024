@@ -1,0 +1,65 @@
+{% set current_page = "event_detail" %}
+{% extends "layouts/app.html" %}
+{% block title %}Calendar | {{ event.title }}{% endblock %}
+{% block content %}
+<div class="container my-5 text-center">
+  <h1 class="mt-2">{{ event.title }}</h1>
+  <p class="lead">
+    <em id="created-on">{{ event.created_on }}</em> by
+    <strong>{{ event.author }}</strong>
+  </p>
+</div>
+
+<div class="bg-dark text-white">
+  <div class="container py-5">
+    <div class="lead">{{ event.body | safe }}</div>
+  </div>
+</div>
+
+<div class="container my-3 text-center">
+  <a href="/events/update/{{ event.id }}" class="btn btn-outline-primary">
+    Update Event
+  </a>
+  <button
+    type="button"
+    class="btn btn-outline-danger"
+    data-bs-toggle="modal"
+    data-bs-target="#deleteModal">
+    Delete the Event
+  </button>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalLabel">Delete Event</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete the event with the title <strong>{{ event.title }}</strong>? This process can not be reveresed.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form action="/events/delete/{{ blog.id }}" method="get">
+          <button type="submit" class="btn btn-danger">Delete Event</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const getLocalTime = () => {
+    const timeEle = document.getElementById("created-on")
+    const utcTimeStamp = new Date(timeEle.textContent)
+
+    const options = {year: "numeric", month: "long", day: "numeric"}
+
+    const localTimeStamp = utcTimeStamp.toLocaleString("en-US", options)
+
+    timeEle.textContent = localTimeStamp
+  }
+
+  getLocalTime()
+</script>
+{% endblock %}

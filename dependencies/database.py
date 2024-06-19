@@ -3,14 +3,14 @@ from fastapi import FastAPI
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 
-from models import blog
+from models import event
 
 
 @asynccontextmanager
 async def connect_to_mongodb(app: FastAPI):
     client = AsyncIOMotorClient("mongodb://localhost")
     await init_beanie(database=client["SMIC"], document_models=[
-        blog.Blogs
+        event.Events
     ])
     print("INFO:     Connected to MongoDB")
     yield
