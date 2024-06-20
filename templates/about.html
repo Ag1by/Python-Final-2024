@@ -3,9 +3,13 @@
 {% block title %}Calendar | Month{% endblock %}
 {% block content %}
 <div class="container my-5">
-      <h2 class="text-center">June 2024</h2>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <button class="btn btn-primary" onclick="changeMonth(-1)">May</button>
+        <h2 id="calendar-title">June 2024</h2>
+        <button class="btn btn-primary" onclick="changeMonth(1)">July</button>
+      </div>
       <table class="table table-bordered">
-        <thead class="thead-dark">
+        <thead class="table-dark">
           <tr>
             <th scope="col">Sun</th>
             <th scope="col">Mon</th>
@@ -16,62 +20,63 @@
             <th scope="col">Sat</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>3</td>
-            <td>4</td>
-            <td>5</td>
-            <td>6</td>
-            <td>7</td>
-            <td>8</td>
-          </tr>
-          <tr>
-            <td>9</td>
-            <td>10</td>
-            <td>11</td>
-            <td>12</td>
-            <td>13</td>
-            <td>14</td>
-            <td>15</td>
-          </tr>
-          <tr>
-            <td>16</td>
-            <td>17</td>
-            <td>18</td>
-            <td>19</td>
-            <td>20</td>
-            <td>21</td>
-            <td>22</td>
-          </tr>
-          <tr>
-            <td>23</td>
-            <td>24</td>
-            <td>25</td>
-            <td>26</td>
-            <td>27</td>
-            <td>28</td>
-            <td>29</td>
-          </tr>
-          <tr>
-            <td>30</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
+        <tbody id="calendar-body">
         </tbody>
       </table>
     </div>
-{% endblock %}
+    {% endblock %}
+
+    <script>
+      const currentDate = new Date();
+      let displayedMonth = currentDate.getMonth();
+      let displayedYear = currentDate.getFullYear();
+
+      function generateCalendar(month, year) {
+        const calendarBody = document.getElementById('calendar-body');
+        calendarBody.innerHTML = '';
+
+        const firstDay = new Date(year, month).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        let date = 1;
+        for (let i = 0; i < 6; i++) {
+          const row = document.createElement('tr');
+
+          for (let j = 0; j < 7; j++) {
+            const cell = document.createElement('td');
+            if (i === 0 && j < firstDay) {
+              cell.innerHTML = '';
+            } else if (date > daysInMonth) {
+              cell.innerHTML = '';
+            } else {
+              cell.innerHTML = date;
+              if (date === currentDate.getDate() && month === currentDate.getMonth() && year === currentDate.getFullYear()) {
+                cell.classList.add('bg-primary', 'text-white');
+              }
+              date++;
+            }
+            row.appendChild(cell);
+          }
+
+          calendarBody.appendChild(row);
+        }
+
+        document.getElementById('calendar-title').innerText = `${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}`;
+      }
+
+      function changeMonth(offset) {
+        displayedMonth += offset;
+        if (displayedMonth < 0) {
+          displayedMonth = 11;
+          displayedYear--;
+        } else if (displayedMonth > 11) {
+          displayedMonth = 0;
+          displayedYear++;
+        }
+        generateCalendar(displayedMonth, displayedYear);
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        generateCalendar(displayedMonth, displayedYear);
+      });
+    </script>
